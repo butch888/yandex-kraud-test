@@ -6,13 +6,11 @@ const basketTwo = document.querySelector('.basket-two');
 const basketThree = document.querySelector('.basket-three');
 const btnPay = document.querySelector('.btn-pay');
 const basket = document.querySelector('.basket');
-const produktsInBasket = {
-  basketOne: ['wine', 'milk', 'cake', 'chese'],
-  basketTwo: ['beef', 'checken', 'cheeps'],
-  basketThree: ['pineapple', 'banana', 'aple', 'salad']
-}
+
 
 let current;
+let count = 0
+let zIndex = 1
 
 products.forEach(function (elem) {
   elem.addEventListener('dragstart', function (e) {
@@ -24,26 +22,31 @@ basket.addEventListener('dragover', function (e) {
   e.preventDefault()
 })
 
-let count = 0
-let zIndex = 1
-
-function updateBasket(produktsInBasket, basket, productName) {
-  if (produktsInBasket.includes(productName)) {
-    basket.appendChild(current)
-    basket.style = `z-index: ${zIndex++}`
-    count += 1
-    console.log(count)
+class Shelf {
+  constructor(item1, item2, item3, item4) {
+    this.shelf = [item1, item2, item3, item4]
+  }
+  updateBasket(produktsOnShelf, basket, productName) {
+    if (produktsOnShelf.includes(productName)) {
+      basket.appendChild(current)
+      basket.style = `z-index: ${zIndex++}`
+      count += 1
+    }
   }
 }
+
+let produktsOnShelfOne = new Shelf('wine', 'milk', 'cake', 'chese')
+let produktsOnShelfTwo = new Shelf('beef', 'checken', 'cheeps')
+let produktsOnShelfThree = new Shelf('pineapple', 'banana', 'aple', 'salad')
 
 basket.addEventListener('drop', function (e) {
   if (!current) return
   let productName = current.className.split(' ')[1]
   console.log(productName)
 
-  updateBasket(produktsInBasket.basketOne, basketOne, productName)
-  updateBasket(produktsInBasket.basketTwo, basketTwo, productName)
-  updateBasket(produktsInBasket.basketThree, basketThree, productName)
+  produktsOnShelfOne.updateBasket(produktsOnShelfOne.shelf, basketOne, productName)
+  produktsOnShelfTwo.updateBasket(produktsOnShelfTwo.shelf, basketTwo, productName)
+  produktsOnShelfThree.updateBasket(produktsOnShelfThree.shelf, basketThree, productName)
 
   if (count >= 3) {
     btnPay.classList.add('btn-pay-visible')
